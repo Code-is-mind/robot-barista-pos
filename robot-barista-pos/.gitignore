@@ -1,0 +1,24 @@
+# Vendor
+/vendor/
+
+# Uploads
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# Config (if contains sensitive data)
+# /config/database.php
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Composer
+composer.lock

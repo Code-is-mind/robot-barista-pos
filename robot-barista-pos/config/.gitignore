@@ -1,0 +1,7 @@
+# Ignore sensitive configuration files
+payment.php
+database.php
+
+# Keep example files
+!payment.example.php
+!database.example.php

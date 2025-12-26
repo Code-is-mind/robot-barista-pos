@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment System Flow - Robot Barista</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+        
+        .flow-step {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .flow-step:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
+        }
+        
+        .step-title {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .step-content {
+            line-height: 1.8;
+            color: #555;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .diagram {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .arrow {
+            font-size: 2em;
+            color: #667eea;
+            margin: 10px 0;
+        }
+        
+        .box {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .api-response {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Robot Barista Payment System</h1>
+        <p class="subtitle">Complete Payment Flow Explanation with KHQR (Bakong)</p>
+
+        <!-- STEP 1 -->
+        <div class="flow-step">
+            <div class="step-number">1</div>
+            <div class="step-title">📱 Customer Places Order</div>
+            <div class="step-content">
+                <p>Customer interacts with the kiosk interface:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Selects product (e.g., Coffee)</li>
+                    <li>Chooses size (Small, Medium, Large)</li>
+                    <li>Sets quantity</li>
+                    <li>Enters name (optional)</li>
+                    <li>Clicks <strong>"Order Now"</strong> button</li>
+                </ul>
+                
+                <div class="info-box">
+                    <strong>📊 Price Calculation:</strong><br>
+                    Subtotal = (Base Price + Size Modifier) × Quantity<br>
+                    Tax = Subtotal × Tax Rate (10%)<br>
+                    <strong>Total = Subtotal + Tax</strong>
+                </div>
+
+                <div class="code-block">
+// JavaScript in product.php
+function processOrder() {
+    const customerName = document.getElementById('customerName').value;
+    const selectedSize = document.querySelector('input[name="size"]:checked').value;
+    const quantity = parseInt(document.getElementById('quantity').value);
+    
+    // Calculate total amount
+    const displayAmount = currentTotal; // Already calculated
+    const displayCurrency = currency; // USD or KHR
+    
+    // Generate QR code
+    generateKHQR(displayAmount, displayCurrency, description, ...);
+}
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="flow-step">
+            <div class="step-number">2</div>
+            <div class="step-title">🔲 Generate KHQR Code</div>
+            <div class="step-content">
+                <p>System generates a unique Bakong QR code using KHQR library:</p>
+                
+                <div class="diagram">
+                    <div class="box">Merchant Info</div>
+                    <div class="box">Amount</div>
+                    <div class="box">Currency</div>
+                    <div class="arrow">⬇️</div>
+                    <div class="box" style="background: #28a745;">KHQR Library</div>
+                    <div class="arrow">⬇️</div>
+                    <div class="box" style="background: #dc3545;">QR Code + MD5 Hash</div>
+                </div>
+
+                <div class="code-block">
+// JavaScript - Generate KHQR
+function generateKHQR(amount, selectedCurrency, description, ...) {
+    const KHQR = BakongKHQR;
+    
+    // Merchant configuration
+    const optionalData = {
+        currency: selectedCurrency === 'USD' ? data.currency.usd : data.currency.khr,
+        amount: parseFloat(amount),
+        mobileNumber: "016700896",
+        storeLabel: "Robot Barista",
+        terminalLabel: "Kiosk1"
+    };
+    
+    const individualInfo = new KHQR.IndividualInfo(
+        "seavpeav_pech@aclb",  // Merchant Account
+        "SEAVPEAV PECH",        // Merchant Name
+        "PHNOM PENH",           // City
+        optionalData
+    );
+    
+    // Generate QR
+    const khqrInstance = new KHQR.BakongKHQR();
+    const individual = khqrInstance.generateIndividual(individualInfo);
+    
+    // Display QR on canvas
+    QRCode.toCanvas(qrCodeCanvas, individual.data.qr, { width: 300 });
+    
+    // Get MD5 hash for tracking
+    const md5Hash = individual.data.md5;
+    
+    // Create order in database
+    createOrder(customerName, size, quantity, md5Hash);
+}
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ Output:</strong><br>
+                    • QR Code (displayed to customer)<br>
+                    • <span class="highlight">MD5 Hash</span> (unique transaction identifier)<br>
+                    • Example MD5: <code>a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="flow-step">
+            <div class="step-number">3</div>
+            <div class="step-title">💾 Create Order in Database</div>
+            <div class="step-content">
+                <p>Order details are saved to MySQL database with <strong>Pending</strong> status:</p>
+
+                <div class="code-block">
+// JavaScript - Create Order
+function createOrder(customerName, size, quantity, md5Hash) {
+    $.ajax({
+        url: 'create_order.php',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            product_id: productId,
+            product_name: productName,
+            customer_name: customerName,
+            size: size,
+            quantity: quantity,
+            unit_price: unitPrice,
+            subtotal: subtotal,
+            tax: tax,
+            total: total,
+            currency: currency,
+            md5_hash: md5Hash  // ← Important for payment tracking
+        }),
+        success: function(response) {
+            currentOrderId = response.order_id;
+            checkPaymentStatus(md5Hash);  // ← Start checking payment
+        }
+    });
+}
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>order_id</td>
+                        <td>123</td>
+                        <td>Unique order identifier</td>
+                    </tr>
+                    <tr>
+                        <td>order_number</td>
+                        <td>ORD-20241215-001</td>
+                        <td>Human-readable order number</td>
+                    </tr>
+                    <tr>
+                        <td>payment_status</td>
+                        <td><strong>Pending</strong></td>
+                        <td>Waiting for payment</td>
+                    </tr>
+                    <tr>
+                        <td>md5_hash</td>
+                        <td>a1b2c3d4...</td>
+                        <td><strong>Track payment via Bakong API</strong></td>
+                    </tr>
+                    <tr>
+                        <td>total</td>
+                        <td>5.50 USD</td>
+                        <td>Amount to be paid</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="flow-step">
+            <div class="step-number">4</div>
+            <div class="step-title">🔄 Payment Checking Loop (Real-time)</div>
+            <div class="step-content">
+                <p>System continuously checks if payment is received:</p>
+
+                <div class="warning-box">
+                    <strong>⏱️ Checking Parameters:</strong><br>
+                    • Check Interval: <span class="highlight">Every 1 second</span><br>
+                    • Timeout: <span class="highlight">120 seconds (2 minutes)</span><br>
+                    • Total Checks: <span class="highlight">120 attempts</span>
+                </div>
+
+                <div class="diagram">
+                    <div class="box">Frontend (JavaScript)</div>
+                    <div class="arrow">⬇️ Every 1 second</div>
+                    <div class="box" style="background: #ffc107;">check_transaction.php</div>
+                    <div class="arrow">⬇️ POST Request</div>
+                    <div class="box" style="background: #17a2b8;">Bakong API</div>
+                    <div class="arrow">⬇️ Response</div>
+                    <div class="box" style="background: #28a745;">Payment Status</div>
+                </div>
+
+                <div class="code-block">
+// JavaScript - Check Payment Status
+function checkPaymentStatus(md5Hash) {
+    let checkCount = 0;
+    const maxChecks = 120; // 2 minutes
+    
+    console.log('Starting payment check with MD5:', md5Hash);
+    
+    // Check every 1 second
+    paymentCheckInterval = setInterval(function() {
+        checkCount++;
+        console.log(`Payment Check #${checkCount}/${maxChecks}`);
+        
+        // Timeout check
+        if (checkCount >= maxChecks) {
+            clearInterval(paymentCheckInterval);
+            onPaymentTimeout();  // Cancel order
+            return;
+        }
+        
+        // Call backend to check payment
+        $.ajax({
+            url: '../../payment/check_transaction.php',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ md5: md5Hash }),
+            success: function(response) {
+                console.log('Response:', response);
+                
+                if (response.responseCode === 0) {
+                    // ✅ PAYMENT FOUND!
+                    clearInterval(paymentCheckInterval);
+                    onPaymentSuccess(response);
+                } else {
+                    // ⏳ Still waiting...
+                    console.log('Payment not yet received');
+                }
+            }
+        });
+    }, 1000); // Every 1 second
+}
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="flow-step">
+            <div class="step-number">5</div>
+            <div class="step-title">🌐 Backend API Call (check_transaction.php)</div>
+            <div class="step-content">
+                <p>PHP backend communicates with Bakong API:</p>
+
+                <div class="code-block">
+// PHP - check_transaction.php
+&lt;?php
+// Receive MD5 from frontend
+$input = json_decode(file_get_contents('php://input'), true);
+$md5 = $input['md5'];
+
+// Load configuration
+$config = getBakongConfig();
+$url = 'https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5';
+$token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // JWT Token
+
+// Prepare request
+$data = json_encode(['md5' => $md5]);
+
+// Call Bakong API
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'Authorization: Bearer ' . $token  // ← Authentication
+]);
+
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
+
+// Return response to frontend
+echo $response;
+?&gt;
+                </div>
+
+                <div class="info-box">
+                    <strong>🔐 Authentication:</strong><br>
+                    Uses JWT (JSON Web Token) for secure API access<br>
+                    Token expires: <strong>2026-04-13</strong><br>
+                    Must be updated before expiration!
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 6 -->
+        <div class="flow-step">
+            <div class="step-number">6</div>
+            <div class="step-title">📡 Bakong API Response</div>
+            <div class="step-content">
+                <p>Bakong API returns payment status:</p>
+
+                <h3 style="margin-top: 20px; color: #dc3545;">❌ Response: Payment NOT Found</h3>
+                <div class="api-response">
+{
+    "responseCode": 1,
+    "responseMessage": "Transaction not found",
+    "data": null
+}
+                </div>
+                <p><strong>Meaning:</strong> Customer hasn't paid yet. Keep checking...</p>
+
+                <h3 style="margin-top: 30px; color: #28a745;">✅ Response: Payment SUCCESSFUL</h3>
+                <div class="api-response">
+{
+    "responseCode": 0,
+    "responseMessage": "Success",
+    "data": {
+        "amount": 5.50,
+        "currency": "USD",
+        "transactionId": "TXN123456789",
+        "timestamp": "2024-12-15T10:30:00Z",
+        "fromAccount": "customer@bank",
+        "toAccount": "seavpeav_pech@aclb",
+        "status": "completed"
+    }
+}
+                </div>
+                <p><strong>Meaning:</strong> Payment received! Update order status.</p>
+
+                <table style="margin-top: 20px;">
+                    <tr>
+                        <th>Response Code</th>
+                        <th>Meaning</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td><strong>0</strong></td>
+                        <td class="success">Payment Successful</td>
+                        <td>Update order → "Paid"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td class="error">Transaction Not Found</td>
+                        <td>Continue checking</td>
+                    </tr>
+                    <tr>
+                        <td><strong>401</strong></td>
+                        <td class="error">Unauthorized</td>
+                        <td>Token expired/invalid</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- STEP 7 -->
+        <div class="flow-step">
+            <div class="step-number">7</div>
+            <div class="step-title">✅ Payment Success Handler</div>
+            <div class="step-content">
+                <p>When payment is detected (responseCode = 0):</p>
+
+                <div class="code-block">
+// JavaScript - Payment Success
+function onPaymentSuccess(transactionData) {
+    console.log('✅ PAYMENT SUCCESSFUL!', transactionData);
+    
+    // 1. Stop checking
+    clearInterval(paymentCheckInterval);
+    clearInterval(countdownInterval);
+    
+    // 2. Update order status in database
+    $.post('update_order_status.php', { 
+        order_id: currentOrderId, 
+        status: 'Paid',
+        transaction_data: JSON.stringify(transactionData)
+    });
+    
+    // 3. Hide payment modal
+    document.getElementById('paymentModal').classList.add('hidden');
+    
+    // 4. Show receipt modal
+    document.getElementById('receiptModal').classList.remove('hidden');
+    
+    // 5. Start 10-second countdown for auto-close
+    let countdown = 10;
+    setInterval(function() {
+        countdown--;
+        document.getElementById('countdown').textContent = countdown;
+        if (countdown <= 0) {
+            skipReceipt(); // Close and return to kiosk
+        }
+    }, 1000);
+}
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ What Happens:</strong><br>
+                    1. Payment checking stops<br>
+                    2. Order status: <strong>Pending → Paid</strong><br>
+                    3. Payment modal closes<br>
+                    4. Receipt modal appears<br>
+                    5. Customer can print receipt or skip<br>
+                    6. Auto-redirect after 10 seconds
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 8 -->
+        <div class="flow-step">
+            <div class="step-number">8</div>
+            <div class="step-title">⏰ Payment Timeout Handler</div>
+            <div class="step-content">
+                <p>If customer doesn't pay within 2 minutes:</p>
+
+                <div class="code-block">
+// JavaScript - Payment Timeout
+function onPaymentTimeout() {
+    console.log('⏰ Payment timeout!');
+    
+    // 1. Cancel order in database
+    if (currentOrderId) {
+        $.post('cancel_order.php', { order_id: currentOrderId });
+    }
+    
+    // 2. Hide payment modal
+    document.getElementById('paymentModal').classList.add('hidden');
+    
+    // 3. Show timeout message
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg';
+    toast.innerHTML = '⏰ Payment timeout! Order cancelled.';
+    document.body.appendChild(toast);
+    
+    // 4. Redirect to kiosk after 3 seconds
+    setTimeout(function() {
+        window.location.href = 'index.php';
+    }, 3000);
+}
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Timeout Scenario:</strong><br>
+                    • Customer scans QR but doesn't complete payment<br>
+                    • Customer changes mind<br>
+                    • Network issues<br>
+                    <br>
+                    <strong>Result:</strong> Order status → <strong>Cancelled</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISUAL FLOW DIAGRAM -->
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 15px; margin: 40px 0;">
+            <h2 style="color: white; text-align: center; margin-bottom: 30px;">📊 Complete Payment Flow Diagram</h2>
+            
+            <div style="background: white; padding: 30px; border-radius: 10px;">
+                <div style="text-align: center;">
+                    <div class="box" style="background: #667eea;">1. Customer Orders</div>
+                    <div class="arrow">⬇️</div>
+                    <div class="box" style="background: #764ba2;">2. Generate KHQR + MD5</div>
+                    <div class="arrow">⬇️</div>
+                    <div class="box" style="background: #667eea;">3. Save Order (Pending)</div>
+                    <div class="arrow">⬇️</div>
+                    <div class="box" style="background: #ffc107;">4. Start Payment Check Loop</div>
+                    <div class="arrow">⬇️ Every 1 second</div>
+                    <div class="box" style="background: #17a2b8;">5. Backend → Bakong API</div>
+                    <div class="arrow">⬇️</div>
+                    <div class="box" style="background: #6c757d;">6. API Response</div>
+                    
+                    <div style="display: flex; justify-content: space-around; margin-top: 30px;">
+                        <div style="flex: 1; margin: 0 10px;">
+                            <div class="arrow">⬇️ responseCode = 0</div>
+                            <div class="box" style="background: #28a745; width: 100%;">7. Payment Success ✅</div>
+                            <div class="arrow">⬇️</div>
+                            <div class="box" style="background: #28a745; width: 100%;">Update: Paid</div>
+                            <div class="arrow">⬇️</div>
+                            <div class="box" style="background: #28a745; width: 100%;">Show Receipt</div>
+                        </div>
+                        
+                        <div style="flex: 1; margin: 0 10px;">
+                            <div class="arrow">⬇️ Timeout (120s)</div>
+                            <div class="box" style="background: #dc3545; width: 100%;">8. Payment Timeout ⏰</div>
+                            <div class="arrow">⬇️</div>
+                            <div class="box" style="background: #dc3545; width: 100%;">Cancel Order</div>
+                            <div class="arrow">⬇️</div>
+                            <div class="box" style="background: #dc3545; width: 100%;">Redirect to Kiosk</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KEY CONFIGURATION -->
+        <div class="flow-step" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+            <div class="step-number" style="background: #ff6b6b;">🔑</div>
+            <div class="step-title" style="color: #ff6b6b;">Key Configuration Files</div>
+            <div class="step-content">
+                <table>
+                    <tr>
+                        <th>File</th>
+                        <th>Purpose</th>
+                        <th>Key Settings</th>
+                    </tr>
+                    <tr>
+                        <td><strong>config/payment.php</strong></td>
+                        <td>Payment configuration</td>
+                        <td>
+                            • API URL<br>
+                            • API Token (JWT)<br>
+                            • Merchant Account<br>
+                            • Merchant Name
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>payment/check_transaction.php</strong></td>
+                        <td>Backend API handler</td>
+                        <td>
+                            • Receives MD5 from frontend<br>
+                            • Calls Bakong API<br>
+                            • Returns payment status
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>public/kiosk/product.php</strong></td>
+                        <td>Frontend payment logic</td>
+                        <td>
+                            • Generate KHQR<br>
+                            • Payment checking loop<br>
+                            • Success/timeout handlers
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>public/kiosk/create_order.php</strong></td>
+                        <td>Create order in database</td>
+                        <td>
+                            • Save order details<br>
+                            • Store MD5 hash<br>
+                            • Set status: Pending
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>public/kiosk/update_order_status.php</strong></td>
+                        <td>Update order after payment</td>
+                        <td>
+                            • Change status to Paid<br>
+                            • Store transaction data
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- TECHNICAL DETAILS -->
+        <div class="flow-step" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+            <div class="step-number" style="background: #17a2b8;">⚙️</div>
+            <div class="step-title" style="color: #17a2b8;">Technical Details</div>
+            <div class="step-content">
+                <h3 style="color: #17a2b8; margin-bottom: 15px;">🔐 Security</h3>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li><strong>JWT Authentication:</strong> Bearer token for API access</li>
+                    <li><strong>HTTPS Required:</strong> All API calls use secure connection</li>
+                    <li><strong>MD5 Hash:</strong> Unique identifier prevents duplicate payments</li>
+                    <li><strong>Token Expiration:</strong> Current token valid until 2026-04-13</li>
+                </ul>
+
+                <h3 style="color: #17a2b8; margin: 20px 0 15px 0;">⚡ Performance</h3>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li><strong>Check Interval:</strong> 1 second (1000ms)</li>
+                    <li><strong>Timeout Duration:</strong> 120 seconds (2 minutes)</li>
+                    <li><strong>Total API Calls:</strong> Up to 120 per order</li>
+                    <li><strong>Bandwidth:</strong> ~1KB per request = ~120KB per order</li>
+                </ul>
+
+                <h3 style="color: #17a2b8; margin: 20px 0 15px 0;">💱 Currency Support</h3>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li><strong>USD:</strong> US Dollar (decimal: $5.50)</li>
+                    <li><strong>KHR:</strong> Cambodian Riel (whole number: ៛22,000)</li>
+                    <li><strong>Exchange Rate:</strong> Configurable in settings (default: 4000 KHR = 1 USD)</li>
+                    <li><strong>QR Code:</strong> Automatically uses selected currency</li>
+                </ul>
+
+                <h3 style="color: #17a2b8; margin: 20px 0 15px 0;">📱 Libraries Used</h3>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li><strong>Bakong KHQR:</strong> Generate KHQR codes (v1.0.6)</li>
+                    <li><strong>QRCode.js:</strong> Display QR codes on canvas</li>
+                    <li><strong>jQuery:</strong> AJAX requests and DOM manipulation</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- DEBUGGING TIPS -->
+        <div class="flow-step" style="background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);">
+            <div class="step-number" style="background: #fdcb6e;">🐛</div>
+            <div class="step-title" style="color: #d63031;">How to Debug Payment Issues</div>
+            <div class="step-content">
+                <h3 style="color: #d63031; margin-bottom: 15px;">1. Check Browser Console (F12)</h3>
+                <div class="code-block">
+// You should see these logs:
+Payment Check #1/120
+Checking transaction with MD5: a1b2c3d4...
+✓ Transaction check response: {responseCode: 1, ...}
+
+// When payment successful:
+✓✓✓ PAYMENT SUCCESSFUL! ✓✓✓
+                </div>
+
+                <h3 style="color: #d63031; margin: 20px 0 15px 0;">2. Check Network Tab</h3>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li>Open DevTools → Network → Filter: XHR</li>
+                    <li>Look for <code>check_transaction.php</code> requests</li>
+                    <li>Status should be <strong>200 OK</strong></li>
+                    <li>Response should show JSON with responseCode</li>
+                </ul>
+
+                <h3 style="color: #d63031; margin: 20px 0 15px 0;">3. Test API Manually</h3>
+                <div class="code-block">
+# Windows PowerShell
+$headers = @{
+    "Authorization" = "Bearer YOUR_TOKEN"
+    "Content-Type" = "application/json"
+}
+$body = @{md5 = "test_hash"} | ConvertTo-Json
+Invoke-RestMethod -Uri "https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5" `
+    -Method Post -Headers $headers -Body $body
+                </div>
+
+                <h3 style="color: #d63031; margin: 20px 0 15px 0;">4. Common Issues</h3>
+                <table>
+                    <tr>
+                        <th>Problem</th>
+                        <th>Cause</th>
+                        <th>Solution</th>
+                    </tr>
+                    <tr>
+                        <td>Payment not detected</td>
+                        <td>Wrong MD5 or API token expired</td>
+                        <td>Check console logs, verify token</td>
+                    </tr>
+                    <tr>
+                        <td>HTTP 401 error</td>
+                        <td>Invalid/expired token</td>
+                        <td>Update token in config/payment.php</td>
+                    </tr>
+                    <tr>
+                        <td>QR not generating</td>
+                        <td>KHQR library not loaded</td>
+                        <td>Check CDN link in product.php</td>
+                    </tr>
+                    <tr>
+                        <td>Timeout too fast</td>
+                        <td>maxChecks value wrong</td>
+                        <td>Should be 120 (not 1800)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- EXAMPLE SCENARIOS -->
+        <div class="flow-step" style="background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);">
+            <div class="step-number" style="background: #00b894;">📖</div>
+            <div class="step-title" style="color: #00b894;">Real-World Scenarios</div>
+            <div class="step-content">
+                <h3 style="color: #00b894; margin-bottom: 15px;">✅ Scenario 1: Successful Payment</h3>
+                <div style="background: white; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>Timeline:</strong><br>
+                    <code>00:00</code> - Customer orders Coffee (Large) - $5.50<br>
+                    <code>00:01</code> - QR code displayed<br>
+                    <code>00:05</code> - Customer scans QR with banking app<br>
+                    <code>00:10</code> - Customer confirms payment<br>
+                    <code>00:12</code> - <span class="success">Payment detected! ✅</span><br>
+                    <code>00:13</code> - Order status: Pending → Paid<br>
+                    <code>00:14</code> - Receipt modal shown<br>
+                    <code>00:24</code> - Auto-redirect to kiosk
+                </div>
+
+                <h3 style="color: #00b894; margin: 20px 0 15px 0;">⏰ Scenario 2: Payment Timeout</h3>
+                <div style="background: white; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>Timeline:</strong><br>
+                    <code>00:00</code> - Customer orders Coffee (Medium) - $4.50<br>
+                    <code>00:01</code> - QR code displayed<br>
+                    <code>00:30</code> - Customer still deciding...<br>
+                    <code>01:00</code> - Customer walks away<br>
+                    <code>02:00</code> - <span class="error">Timeout! ⏰</span><br>
+                    <code>02:01</code> - Order cancelled automatically<br>
+                    <code>02:04</code> - Redirect to kiosk
+                </div>
+
+                <h3 style="color: #00b894; margin: 20px 0 15px 0;">🔄 Scenario 3: Customer Cancels</h3>
+                <div style="background: white; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>Timeline:</strong><br>
+                    <code>00:00</code> - Customer orders Coffee (Small) - $3.50<br>
+                    <code>00:01</code> - QR code displayed<br>
+                    <code>00:15</code> - Customer changes mind<br>
+                    <code>00:16</code> - Customer clicks "Cancel Payment"<br>
+                    <code>00:17</code> - Order cancelled immediately<br>
+                    <code>00:18</code> - Returns to product page
+                </div>
+            </div>
+        </div>
+
+        <!-- SUMMARY -->
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; border-radius: 15px; margin: 40px 0; color: white;">
+            <h2 style="text-align: center; margin-bottom: 30px; font-size: 2em;">📝 Summary</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                    <h3 style="margin-bottom: 10px;">🎯 Payment Method</h3>
+                    <p>KHQR (Bakong) - Cambodia's national payment system</p>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                    <h3 style="margin-bottom: 10px;">⏱️ Check Interval</h3>
+                    <p>Every 1 second for 2 minutes (120 checks)</p>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                    <h3 style="margin-bottom: 10px;">🔐 Authentication</h3>
+                    <p>JWT Bearer Token (expires 2026-04-13)</p>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                    <h3 style="margin-bottom: 10px;">💱 Currencies</h3>
+                    <p>USD and KHR (Cambodian Riel)</p>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                    <h3 style="margin-bottom: 10px;">📡 API Endpoint</h3>
+                    <p>api-bakong.nbc.gov.kh</p>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;">
+                    <h3 style="margin-bottom: 10px;">🔑 Tracking</h3>
+                    <p>MD5 hash for unique transaction ID</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 10px; margin-top: 40px;">
+            <h3 style="color: #667eea; margin-bottom: 15px;">🚀 Ready to Test?</h3>
+            <p style="color: #666; margin-bottom: 20px;">
+                Open your browser console (F12) and watch the payment flow in real-time!
+            </p>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <div style="background: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <strong>📁 Config:</strong> config/payment.php
+                </div>
+                <div style="background: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <strong>🔧 Backend:</strong> payment/check_transaction.php
+                </div>
+                <div style="background: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <strong>💻 Frontend:</strong> public/kiosk/product.php
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
